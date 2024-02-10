@@ -1,0 +1,60 @@
+.dish-type-image {
+  height: 100px;
+  width: 100px;
+}
+.dish-item {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid gray;
+  margin-bottom: 20px;
+  border-radius: 10px;
+}
+.dish-img {
+  height: 200px;
+  width: 200px;
+}
+.first {
+  width: 10vw;
+  padding: 20px;
+}
+.second {
+  width: 60vw;
+  justify-self: flex-start;
+}
+.third {
+  width: 20vw;
+  align-self: center;
+  color: orange;
+}
+.fourth {
+  width: 30vw;
+  justify-self: flex-end;
+  align-self: center;
+  border-radius: 10px;
+}
+.price {
+  display: flex;
+  flex-direction: row;
+}
+.count {
+  display: flex;
+  flex-direction: row;
+  background-color: green;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  align-items: center;
+  border-radius: 20px;
+  width: 20vw;
+  height: 10vh;
+}
+.count-button {
+  background-color: transparent;
+  margin: 30px;
+  border: none;
+  color: white;
+  font-size: 28px;
+}
+.count-button:hover {
+  cursor: pointer;
+}
