@@ -20,7 +20,7 @@ class App extends Component {
     }
   }
 
-  deleteCartItem = id => {
+  deleteCartItem = (id, price) => {
     const {cartList} = this.state
     const updated = cartList.filter(each => each.dishId !== id)
     this.setState({cartList: updated})
@@ -30,15 +30,28 @@ class App extends Component {
     this.setState({cartList: []})
   }
 
-  incrementCartItemQuantity = id => {
+  incrementCartItemQuantity = (id, price) => {
     const {cartList} = this.state
     const updated = cartList.map(each => {
       if (each.dishId === id) {
-        return {...each, quantity: each.quantity + 1}
+        return {
+          ...each,
+          quantity: each.quantity + 1,
+        }
       }
       return each
     })
     this.setState({cartList: updated})
+    const updated2 = cartList.map(each => {
+      if (each.dishId === id) {
+        return {
+          ...each,
+          dishPrice: each.dishPrice + price,
+        }
+      }
+      return each
+    })
+    this.setState({cartList: updated2})
   }
 
   decrementCartItemQuantity = id => {
@@ -48,6 +61,7 @@ class App extends Component {
         return {
           ...each,
           quantity: each.quantity === 0 ? 0 : each.quantity - 1,
+          dishPrice: each.dishPrice * each.quantity,
         }
       }
       return each
