@@ -36,7 +36,12 @@ const Header = props => {
           </Link>
         </div>
         <div className="right">
-          <IoCartOutline />
+          <Link to="/cart">
+            <button type="button" className="add-cart-button">
+              <IoCartOutline />
+            </button>
+          </Link>
+
           {renderCartCount()}
         </div>
         <div className="right2">
