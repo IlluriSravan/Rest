@@ -34,9 +34,15 @@ const CartHeader = props => (
               </Link>
             </div>
           </div>
-          <button type="button" onClick={onRemoveAll} className="add-cart-item">
-            Remove All
-          </button>
+          {cartList.length > 0 && (
+            <button
+              type="button"
+              onClick={onRemoveAll}
+              className="add-cart-item"
+            >
+              Remove All
+            </button>
+          )}
           <button type="button" className="add-cart-item" onClick={onLogout}>
             Logout
           </button>

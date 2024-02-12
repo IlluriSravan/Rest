@@ -12,7 +12,11 @@ const Cart = () => (
         <>
           <CartHeader />
           {cartList.length === 0 ? (
-            <p>Nothing to show here</p>
+            <img
+              src="https://assets.ccbp.in/frontend/react-js/nxt-trendz-empty-cart-img.png"
+              className="cart-empty-image"
+              alt="cart empty"
+            />
           ) : (
             <ul className="cart-list">
               {cartList.map(eachCartItem => (

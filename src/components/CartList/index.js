@@ -28,9 +28,6 @@ const CartList = props => {
           removeCartItem,
         } = value
         const addToCart = dishAvailability && quantity > 0
-        const onIncrementQuantity = () => {
-          incrementCartItemQuantity(dishId, quantity)
-        }
 
         const onDecrementQuantity = () => {
           decrementCartItemQuantity(dishId, quantity)
@@ -75,7 +72,9 @@ const CartList = props => {
                     <button
                       className="qty-btn"
                       type="button"
-                      onClick={onIncrementQuantity}
+                      onClick={() =>
+                        incrementCartItemQuantity(dishId, quantity)
+                      }
                     >
                       +
                     </button>
@@ -103,3 +102,6 @@ const CartList = props => {
 }
 
 export default CartList
+// const onIncrementQuantity = () => {
+//           incrementCartItemQuantity(dishId, quantity)
+//         }
