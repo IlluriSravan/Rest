@@ -1,140 +1,135 @@
-import './index.css'
-import {Component} from 'react'
-import Header from '../Header'
-import CategoryItem from '../CategoryItem'
-
+import {useState} from 'react'
+import {AiOutlineShoppingCart} from 'react-icons/ai'
+import {Redirect, Link} from 'react-router-dom'
+import Cookies from 'js-cookie'
+import MenuItem from '../MenuItem'
 import FoodItem from '../FoodItem'
 
-const categories = [
-  'Salads and Soup',
-  'From The Barnyard',
-  'From the Hen House',
-  'Fresh From The Sea',
-  'Biryani',
-  'Fast Food',
-]
-class Home extends Component {
-  state = {total: [], displayData: [], active: 0}
+import './index.css'
 
-  componentDidMount() {
-    this.getApi()
-  }
+const Home = props => {
+  const {restaurantName, tableMenuList} = props
+  const menuItems = tableMenuList.map(each => each.menuCategory)
 
-  getApi = async () => {
-    const {active} = this.state
-    const url = 'https://run.mocky.io/v3/77a7e71b-804a-4fbd-822c-3e365d3482cc'
-    const response = await fetch(url)
-    const data = await response.json()
-    const array = data.map(each => ({
-      tableMenuList: each.table_menu_list,
-      restaurantName: each.restaurant_name,
+  const newObject = {}
+
+  tableMenuList.forEach(menuItem => {
+    const {menuCategory, categoryDishes} = menuItem
+    const formattedCategoryDishes = categoryDishes.map(eachDish => ({
+      dishId: eachDish.dish_id,
+      dishName: eachDish.dish_name,
+      dishCurrency: eachDish.dish_currency,
+      dishPrice: eachDish.dish_price,
+      dishImage: eachDish.dish_image,
+      dishCalories: eachDish.dish_calories,
+      dishDescription: eachDish.dish_description,
+      dishAvailability: eachDish.dish_Availability,
+      dishType: eachDish.dish_Type,
+      addonCat: eachDish.addonCat,
+      quantity: 0,
     }))
+    newObject[menuCategory] = formattedCategoryDishes
+  })
 
-    const totalDetails = array[0]
-    const {tableMenuList, restaurantName} = totalDetails
-    const format = tableMenuList.map(each => ({
-      categoryDishes: each.category_dishes.map(each1 => ({
-        dishId: each1.dish_id,
-        dishName: each1.dish_name,
-        dishAvailability: each1.dish_availability,
-        dishCurrency: each1.dish_currency,
-        dishType: each1.dish_Type,
-        dishCalories: each1.dish_calories,
-        dishImage: each1.dish_image,
-        dishPrice: each1.dish_price,
-        dishDescription: each1.dish_description,
-        nexturl: each1.nexturl,
-        addonCat: each1.addonCat,
-        quantity: 0,
-      })),
-      menuCategory: each.menu_category,
-      menuCategoryId: each.menu_category_id,
-      menuCategoryImage: each.menu_category_image,
-      nexturl: each.nexturl,
-    }))
-    console.log('format:-->', format)
-    console.log('cat', format)
-    this.setState({total: format})
-    const single = format[active]
-    const {categoryDishes} = single
-    console.log('CAAAA', categoryDishes)
-    this.setState({displayData: categoryDishes})
+  const [selectedCategory, setSelectedCategory] = useState(
+    tableMenuList[0].menuCategory,
+  )
+  const [foodItems, setFoodItems] = useState(newObject)
+  const [cartCount, setCartCount] = useState(0)
+
+  const onChangeMenuCategory = name => {
+    setSelectedCategory(name)
   }
 
-  onClickItem = sel => {
-    const {total} = this.state
-    switch (sel) {
-      case categories[0]:
-        this.setState({displayData: total[0].categoryDishes})
-        break
-      case categories[1]:
-        this.setState({displayData: total[1].categoryDishes})
-        break
-      case categories[2]:
-        this.setState({displayData: total[2].categoryDishes})
-        break
-      case categories[3]:
-        this.setState({displayData: total[3].categoryDishes})
-        break
-      case categories[4]:
-        this.setState({displayData: total[4].categoryDishes})
-        break
-      case categories[5]:
-        this.setState({displayData: total[5].categoryDishes})
-        break
-      default:
-        this.setState({active: 0})
-    }
-  }
-
-  increment = id => {
-    const {displayData} = this.state
-    const increasedData = displayData.map(each => {
+  const onIncreaseQuantity = id => {
+    const increasedQuantity = foodItems[selectedCategory].map(each => {
       if (each.dishId === id) {
-        return {...each, quantity: each.quantity + 1}
-      }
-      return each
-    })
-    this.setState({displayData: increasedData})
-  }
-
-  decrement = id => {
-    const {displayData} = this.state
-    const decreasedData = displayData.map(each => {
-      if (each.dishId === id) {
-        if (each.quantity !== 0) {
-          return {...each, quantity: each.quantity - 1}
+        return {
+          ...each,
+          quantity: each.quantity + 1,
         }
       }
       return each
     })
-    this.setState({displayData: decreasedData})
+    const updatedFoodItems = {...foodItems}
+    updatedFoodItems[selectedCategory] = increasedQuantity
+    setFoodItems(updatedFoodItems)
+    setCartCount(prev => prev + 1)
   }
 
-  render() {
-    const {displayData, active} = this.state
+  const onDecreaseQuantity = id => {
+    const increasedQuantity = foodItems[selectedCategory].map(each => {
+      if (each.dishId === id) {
+        if (each.quantity !== 0) {
+          setCartCount(prev => (prev === 0 ? 0 : prev - 1))
+        }
+        return {
+          ...each,
+          quantity: each.quantity === 0 ? 0 : each.quantity - 1,
+        }
+      }
+      return each
+    })
+    const updatedFoodItems = {...foodItems}
+    updatedFoodItems[selectedCategory] = increasedQuantity
+    setFoodItems(updatedFoodItems)
+  }
 
-    return (
-      <>
-        <Header />
-        {categories.map(each => (
-          <CategoryItem
-            key={each}
-            details={each}
-            onClickItem={this.onClickItem}
+  const getSelectedCategoryFoodItem = () => {
+    const itemsList = foodItems[selectedCategory]
+    return itemsList
+  }
+
+  const onLogout = () => {
+    const {history} = props
+    console.log(props)
+    Cookies.remove('jwt_token')
+    history.replace('/login')
+    return <Redirect to="/login" />
+  }
+
+  return (
+    <div className="food-app">
+      <nav className="nav-bar">
+        <Link to="/">
+          <h1 className="cafe-name">{restaurantName}</h1>
+        </Link>
+
+        <div className="nav-items">
+          <p className="my-orders">My Orders</p>
+          <div className="cart">
+            <Link to="/cart">
+              <AiOutlineShoppingCart className="cart-icon" />
+              <span className="cart-count">{cartCount}</span>
+            </Link>
+          </div>
+        </div>
+        <button type="button" onClick={onLogout}>
+          Logout
+        </button>
+      </nav>
+      <ul className="menu-list">
+        {menuItems.map(eachItem => (
+          <MenuItem
+            key={eachItem}
+            name={eachItem}
+            isSelected={eachItem === selectedCategory}
+            onChangeMenuCategory={onChangeMenuCategory}
           />
         ))}
-
-        {displayData.map(each => (
+      </ul>
+      <ul className="food-items-list">
+        {getSelectedCategoryFoodItem().map(eachItem => (
           <FoodItem
-            key={each.dishId}
-            details={each}
-            increment={this.increment}
-            decrement={this.decrement}
+            key={eachItem.dishId}
+            data={eachItem}
+            onIncreaseQuantity={onIncreaseQuantity}
+            onDecreaseQuantity={onDecreaseQuantity}
           />
         ))}
-      </>
-    )
-  }
+      </ul>
+    </div>
+  )
 }
+
 export default Home

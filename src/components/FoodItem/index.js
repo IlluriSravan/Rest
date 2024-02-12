@@ -2,97 +2,90 @@ import './index.css'
 import CartContext from '../../context/CartContext'
 
 const FoodItem = props => {
-  const {details, increment, decrement} = props
+  const {data, onIncreaseQuantity, onDecreaseQuantity} = props
   const {
     dishId,
     dishName,
+    dishCurrency,
     dishPrice,
     dishImage,
-    dishCurrency,
     dishCalories,
-    dishType,
     dishDescription,
-    dishAvailabiity,
+    dishAvailability,
+    dishType,
     addonCat,
     quantity,
-  } = details
-  console.log(dishAvailabiity)
-  const addToCart = quantity > 0
+  } = data
 
-  const dishTypeImage =
-    dishType === 2
-      ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Veg_symbol.svg/1200px-Veg_symbol.svg.png'
-      : 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Non_veg_symbol.svg/2048px-Non_veg_symbol.svg.png'
+  const itemQuantity = quantity
 
-  const onIncrement = () => {
-    increment(dishId)
+  const onIncrementQuantity = () => {
+    onIncreaseQuantity(dishId)
   }
 
-  const onDecrement = () => {
-    decrement(dishId)
+  const onDecrementQuantity = () => {
+    onDecreaseQuantity(dishId)
   }
 
   return (
     <CartContext.Consumer>
-      {value => {
-        const {addCartItem} = value
-        const onAddCartItem = () => {
-          addCartItem(details)
-        }
-        return (
-          <li className="dish-item">
-            <div className="first">
-              <img src={dishTypeImage} className="dish-type-image" />
-            </div>
-            <div className="second">
-              <h1>{dishName}</h1>
-              <div className="price">
-                <p>
-                  {dishCurrency} {dishPrice}
-                </p>
-              </div>
-              <p>{dishDescription}</p>
-              <div className="count">
+      <li className="food-item">
+        <div className="container-1">
+          {dishType === 1 ? (
+            <img
+              className="dish-type"
+              src="https://img.icons8.com/color/48/vegetarian-food-symbol.png"
+              alt="vegetarian-food-symbol"
+            />
+          ) : (
+            <img
+              className="dish-type"
+              src="https://img.icons8.com/color/48/non-vegetarian-food-symbol.png"
+              alt="non-vegetarian-food-symbol"
+            />
+          )}
+          <div className="dish-details">
+            <h1 className="dish-name">{dishName}</h1>
+            <p className="dish-price">
+              {dishCurrency} {dishPrice}
+            </p>
+            <p className="dish-description">{dishDescription}</p>
+            {dishAvailability ? (
+              <div className="dish-availability">
                 <button
+                  className="qty-btn"
                   type="button"
-                  className="count-button"
-                  onClick={onDecrement}
+                  onClick={onDecrementQuantity}
                 >
                   -
                 </button>
-                <p>{quantity}</p>
+
+                <p className="quantity">{itemQuantity}</p>
                 <button
+                  className="qty-btn"
                   type="button"
-                  className="count-button"
-                  onClick={onIncrement}
+                  onClick={onIncrementQuantity}
                 >
                   +
                 </button>
               </div>
-              {addonCat.length !== 0 && (
-                <h1 className="custom">Customizations available</h1>
-              )}
-              {dishAvailabiity && <p className="custom">Not available</p>}
-            </div>
-            <div className="third">
-              <p>{dishCalories} Calories</p>
-              {addToCart && (
-                <button
-                  type="button"
-                  className="add-button"
-                  onClick={onAddCartItem}
-                >
-                  Add To Cart
-                </button>
-              )}
-            </div>
-            <div className="fourth">
-              <img src={dishImage} className="dish-img" />
-            </div>
-          </li>
-        )
-      }}
+            ) : (
+              <p className="dish-not-availability">Not available</p>
+            )}
+            <p className="dish-customizations">
+              {addonCat.length > 0 && 'Customizations available'}
+            </p>
+          </div>
+        </div>
+        <div className="container-2">
+          <p className="dish-calories">{dishCalories} calories</p>
+          <div className="img-container">
+            <img src={dishImage} className="dish-image" alt={dishName} />
+          </div>
+        </div>
+      </li>
     </CartContext.Consumer>
   )
 }
+
 export default FoodItem

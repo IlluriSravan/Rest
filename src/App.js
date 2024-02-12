@@ -2,7 +2,7 @@ import './App.css'
 import {Component} from 'react'
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import CartContext from './context/CartContext'
-import Home from './components/Home'
+import Body from './components/Body'
 import Cart from './components/Cart'
 import LoginForm from './components/LoginForm'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -86,7 +86,7 @@ class App extends Component {
         >
           <Switch>
             <Route exact path="/login" component={LoginForm} />
-            <ProtectedRoute exact path="/" component={Home} />
+            <ProtectedRoute exact path="/" component={Body} />
             <ProtectedRoute exact path="/cart" component={Cart} />
           </Switch>
         </CartContext.Provider>

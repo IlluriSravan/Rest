@@ -1,6 +1,6 @@
 import CartList from '../CartList'
 import CartContext from '../../context/CartContext'
-import Header from '../Header'
+
 import './index.css'
 
 const Cart = () => (
@@ -13,7 +13,6 @@ const Cart = () => (
       } = value
       return (
         <>
-          <Header />
           {cartList.length === 0 ? (
             <p>Nothing to show here</p>
           ) : (
