@@ -1,7 +1,8 @@
 import {useState} from 'react'
-import {AiOutlineShoppingCart} from 'react-icons/ai'
+
 import {Redirect, Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
+import Header from '../Header'
 import MenuItem from '../MenuItem'
 import FoodItem from '../FoodItem'
 
@@ -41,12 +42,14 @@ const Home = props => {
     setSelectedCategory(name)
   }
 
-  const onIncreaseQuantity = id => {
+  const onIncreaseQuantity = (id, quantity) => {
     const increasedQuantity = foodItems[selectedCategory].map(each => {
+      const price = each.dishPrice
       if (each.dishId === id) {
         return {
           ...each,
           quantity: each.quantity + 1,
+          dishPrice: price * quantity,
         }
       }
       return each
@@ -80,34 +83,9 @@ const Home = props => {
     return itemsList
   }
 
-  const onLogout = () => {
-    const {history} = props
-    console.log(props)
-    Cookies.remove('jwt_token')
-    history.replace('/login')
-    return <Redirect to="/login" />
-  }
-
   return (
     <div className="food-app">
-      <nav className="nav-bar">
-        <Link to="/">
-          <h1 className="cafe-name">{restaurantName}</h1>
-        </Link>
-
-        <div className="nav-items">
-          <p className="my-orders">My Orders</p>
-          <div className="cart">
-            <Link to="/cart">
-              <AiOutlineShoppingCart className="cart-icon" />
-              <span className="cart-count">{cartCount}</span>
-            </Link>
-          </div>
-        </div>
-        <button type="button" onClick={onLogout}>
-          Logout
-        </button>
-      </nav>
+      <Header />
       <ul className="menu-list">
         {menuItems.map(eachItem => (
           <MenuItem

@@ -9,10 +9,23 @@
   margin: 15px;
   min-height: 230px;
 }
-
+.middle-section {
+  display: flex;
+  flex-direction: row;
+}
 .container-1 {
   width: 60%;
   display: flex;
+}
+.add-cart-item {
+  background-color: orange;
+  height: 40px;
+  margin-left: 20px;
+  justify-content: flex-start;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
 }
 
 .container-2 {
@@ -73,6 +86,7 @@ img-container {
 
 .dish-availability {
   display: flex;
+  flex-direction: row;
   justify-content: space-around;
   align-items: center;
   background-color: green;

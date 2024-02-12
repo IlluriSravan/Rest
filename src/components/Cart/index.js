@@ -1,18 +1,16 @@
 import CartList from '../CartList'
 import CartContext from '../../context/CartContext'
+import CartHeader from '../CartHeader'
 
 import './index.css'
 
 const Cart = () => (
   <CartContext.Consumer>
     {value => {
-      const {
-        cartList,
-        incrementCartItemQuantity,
-        decrementCartItemQuantity,
-      } = value
+      const {cartList} = value
       return (
         <>
+          <CartHeader />
           {cartList.length === 0 ? (
             <p>Nothing to show here</p>
           ) : (
@@ -21,8 +19,6 @@ const Cart = () => (
                 <CartList
                   key={eachCartItem.dishId}
                   cartItemDetails={eachCartItem}
-                  incrementCartItemQuantity={incrementCartItemQuantity}
-                  decrementCartItemQuantity={decrementCartItemQuantity}
                 />
               ))}
             </ul>

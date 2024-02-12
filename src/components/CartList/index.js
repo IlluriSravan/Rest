@@ -2,83 +2,98 @@ import './index.css'
 import CartContext from '../../context/CartContext'
 
 const CartList = props => {
-  const {
-    cartItemDetails,
-    incrementCartItemQuantity,
-    decrementCartItemQuantity,
-  } = props
+  const {cartItemDetails} = props
   const {
     dishId,
     dishName,
+    dishCurrency,
     dishPrice,
     dishImage,
-    dishCurrency,
     dishCalories,
-    dishType,
     dishDescription,
-    dishAvailabiity,
+    dishAvailability,
+    dishType,
     addonCat,
     quantity,
   } = cartItemDetails
-  console.log(dishAvailabiity)
-  const addToCart = quantity > 0
-  const dishTypeImage =
-    dishType === 2
-      ? 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b2/Veg_symbol.svg/1200px-Veg_symbol.svg.png'
-      : 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Non_veg_symbol.svg/2048px-Non_veg_symbol.svg.png'
-  const onIncrement = () => {
-    incrementCartItemQuantity(dishId, dishPrice)
-  }
-  const onDecrement = () => {
-    decrementCartItemQuantity(dishId, dishPrice)
-  }
+
+  const itemQuantity = quantity
+
   return (
     <CartContext.Consumer>
       {value => {
-        const {addCartItem, cartList} = value
-        const onAddCartItem = () => {
-          addCartItem(cartItemDetails)
+        const {
+          incrementCartItemQuantity,
+          decrementCartItemQuantity,
+          removeCartItem,
+        } = value
+        const addToCart = dishAvailability && quantity > 0
+        const onIncrementQuantity = () => {
+          incrementCartItemQuantity(dishId, quantity)
         }
+
+        const onDecrementQuantity = () => {
+          decrementCartItemQuantity(dishId, quantity)
+        }
+
+        const onRemove = () => {
+          removeCartItem(dishId)
+        }
+
         return (
-          <li className="dish-item">
-            <div className="first">
-              <img src={dishTypeImage} className="dish-type-image" />
-            </div>
-            <div className="second">
-              <h1>{dishName}</h1>
-              <div className="price">
-                <p>
+          <li className="food-item">
+            <div className="container-1">
+              {dishType === 1 ? (
+                <img
+                  className="dish-type"
+                  src="https://img.icons8.com/color/48/vegetarian-food-symbol.png"
+                  alt="vegetarian-food-symbol"
+                />
+              ) : (
+                <img
+                  className="dish-type"
+                  src="https://img.icons8.com/color/48/non-vegetarian-food-symbol.png"
+                  alt="non-vegetarian-food-symbol"
+                />
+              )}
+              <div className="dish-details">
+                <h1 className="dish-name">{dishName}</h1>
+                <p className="dish-price">
                   {dishCurrency} {dishPrice}
                 </p>
+                <div className="middle-section">
+                  <div className="dish-availability">
+                    <button
+                      className="qty-btn"
+                      type="button"
+                      onClick={onDecrementQuantity}
+                    >
+                      -
+                    </button>
+
+                    <p className="quantity">{itemQuantity}</p>
+                    <button
+                      className="qty-btn"
+                      type="button"
+                      onClick={onIncrementQuantity}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
               </div>
-              <p>{dishDescription}</p>
-              <div className="count">
-                <button
-                  type="button"
-                  className="count-button"
-                  onClick={onDecrement}
-                >
-                  -
-                </button>
-                <p>{quantity}</p>
-                <button
-                  type="button"
-                  className="count-button"
-                  onClick={onIncrement}
-                >
-                  +
-                </button>
+            </div>
+            <div className="container-2">
+              <button
+                type="button"
+                className="add-cart-item"
+                onClick={onRemove}
+              >
+                Remove
+              </button>
+              <div className="img-container">
+                <img src={dishImage} className="dish-image" alt={dishName} />
               </div>
-              {addonCat.length !== 0 && (
-                <h1 className="custom">Customizations available</h1>
-              )}
-              {dishAvailabiity && <p className="custom">Not available</p>}
-            </div>
-            <div className="third">
-              <p>{dishCalories} Calories</p>
-            </div>
-            <div className="fourth">
-              <img src={dishImage} className="dish-img" />
             </div>
           </li>
         )
@@ -86,4 +101,5 @@ const CartList = props => {
     </CartContext.Consumer>
   )
 }
+
 export default CartList
