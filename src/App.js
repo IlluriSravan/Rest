@@ -30,7 +30,7 @@ class App extends Component {
     this.setState({cartList: []})
   }
 
-  incrementCartItemQuantity = (id, quantity) => {
+  incrementCartItemQuantity = id => {
     const {cartList} = this.state
     const updated = cartList.map(each => {
       const price = each.dishPrice
@@ -38,7 +38,7 @@ class App extends Component {
         return {
           ...each,
           quantity: each.quantity + 1,
-          dishPrice: price * quantity,
+          dishPrice: each.dishPrice * each.quantity,
         }
       }
       return each
