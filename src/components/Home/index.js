@@ -49,7 +49,6 @@ const Home = props => {
         return {
           ...each,
           quantity: each.quantity + 1,
-          dishPrice: price * quantity,
         }
       }
       return each
