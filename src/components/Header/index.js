@@ -25,12 +25,14 @@ const Header = props => (
             <p className="my-orders">My Orders</p>
             <div className="cart">
               <Link to="/cart">
-                <AiOutlineShoppingCart className="cart-icon" />
-                <span className="cart-count">{cartList.length}</span>
+                <button type="button">
+                  <AiOutlineShoppingCart className="cart-icon" />
+                </button>
               </Link>
+              <span className="cart-count">{cartList.length}</span>
             </div>
           </div>
-          <button type="button" onClick={onLogout}>
+          <button type="button" className="add-cart-item" onClick={onLogout}>
             Logout
           </button>
         </nav>
