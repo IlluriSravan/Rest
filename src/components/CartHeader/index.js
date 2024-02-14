@@ -30,8 +30,8 @@ const CartHeader = props => (
             <div className="cart">
               <Link to="/cart">
                 <AiOutlineShoppingCart className="cart-icon" />
-                <span className="cart-count">{cartList.length}</span>
               </Link>
+              <span className="cart-count">{cartList.length}</span>
             </div>
           </div>
           {cartList.length > 0 && (
